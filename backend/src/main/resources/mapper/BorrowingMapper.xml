@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.mapper.BorrowingMapper">
+
+    <resultMap id="BorrowingResult" type="com.library.entity.Borrowing">
+        <id property="id" column="id"/>
+        <result property="readerId" column="reader_id"/>
+        <result property="readerName" column="reader_name"/>
+        <result property="readerInitials" column="reader_initials"/>
+        <result property="bookTitle" column="book_title"/>
+        <result property="borrowDate" column="borrow_date"/>
+        <result property="dueDate" column="due_date"/>
+        <result property="status" column="status"/>
+        <result property="overdueDays" column="overdue_days"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="BorrowingResult">
+        SELECT * FROM t_borrowing ORDER BY id DESC
+    </select>
+
+    <select id="findById" resultMap="BorrowingResult">
+        SELECT * FROM t_borrowing WHERE id = #{id}
+    </select>
+
+    <select id="findByStatus" resultMap="BorrowingResult">
+        SELECT * FROM t_borrowing WHERE status = #{status}
+    </select>
+
+    <select id="search" resultMap="BorrowingResult">
+        SELECT * FROM t_borrowing
+        WHERE reader_name LIKE CONCAT('%', #{keyword}, '%')
+           OR reader_id LIKE CONCAT('%', #{keyword}, '%')
+           OR book_title LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY id DESC
+    </select>
+
+    <insert id="insert">
+        INSERT INTO t_borrowing (id, reader_id, reader_name, reader_initials, book_title, borrow_date, due_date, status, overdue_days)
+        VALUES (#{id}, #{readerId}, #{readerName}, #{readerInitials}, #{bookTitle}, #{borrowDate}, #{dueDate}, #{status}, #{overdueDays})
+    </insert>
+
+    <update id="update">
+        UPDATE t_borrowing
+        <set>
+            <if test="readerId != null">reader_id = #{readerId},</if>
+            <if test="readerName != null">reader_name = #{readerName},</if>
+            <if test="readerInitials != null">reader_initials = #{readerInitials},</if>
+            <if test="bookTitle != null">book_title = #{bookTitle},</if>
+            <if test="borrowDate != null">borrow_date = #{borrowDate},</if>
+            <if test="dueDate != null">due_date = #{dueDate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="overdueDays != null">overdue_days = #{overdueDays},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM t_borrowing WHERE id = #{id}
+    </delete>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM t_borrowing
+    </select>
+
+    <select id="countByStatus" resultType="long">
+        SELECT COUNT(*) FROM t_borrowing WHERE status = #{status}
+    </select>
+
+</mapper>

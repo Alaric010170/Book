@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.mapper.NotificationMapper">
+
+    <resultMap id="NotificationResult" type="com.library.entity.Notification">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="time" column="time"/>
+        <result property="type" column="type"/>
+        <result property="isRead" column="is_read"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="NotificationResult">
+        SELECT * FROM t_notification ORDER BY id DESC
+    </select>
+
+    <select id="findById" resultMap="NotificationResult">
+        SELECT * FROM t_notification WHERE id = #{id}
+    </select>
+
+    <select id="findUnread" resultMap="NotificationResult">
+        SELECT * FROM t_notification WHERE is_read = false ORDER BY id DESC
+    </select>
+
+    <insert id="insert">
+        INSERT INTO t_notification (id, title, content, time, type, is_read)
+        VALUES (#{id}, #{title}, #{content}, #{time}, #{type}, #{isRead})
+    </insert>
+
+    <update id="update">
+        UPDATE t_notification
+        <set>
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="time != null">time = #{time},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="isRead != null">is_read = #{isRead},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM t_notification WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteAll">
+        DELETE FROM t_notification
+    </delete>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM t_notification
+    </select>
+
+</mapper>

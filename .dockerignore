@@ -1,0 +1,22 @@
+# 前端
+node_modules
+dist
+*.log
+.env
+.env.local
+.idea
+.vscode
+*.iml
+.DS_Store
+
+# 后端
+backend/target
+backend/.idea
+backend/*.iml
+
+# Git
+.git
+.gitignore
+
+# 系统
+Thumbs.db
